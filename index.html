@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Boston House Price Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.4.0"></script>
+</head>
+<body>
+<div class="container">
+    <h2>🏠 Predict House Price</h2>
+
+    <form action="/predict" method="post">
+        {% for label in ['CRIM','ZN','INDUS','CHAS','NOX','RM','AGE','DIS','RAD','TAX','PTRATIO','B','LSTAT'] %}
+            <label>{{ label }}:</label>
+            <input type="text" name="{{ label }}" required><br>
+        {% endfor %}
+        <input type="submit" value="Predict">
+    </form>
+
+    {% if prediction_text %}
+        <h3 class="{{ price_class }}">{{ prediction_text }}</h3>
+    {% endif %}
+
+    {% if predicted_price %}
+        <canvas id="priceChart" width="400" height="300"></canvas>
+        <script>
+            const predictedPrice = {{ predicted_price }};
+            const ctx = document.getElementById('priceChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Predicted Price'],
+                    datasets: [{
+                        label: 'Price (in ₹)',
+                        data: [predictedPrice],
+                        backgroundColor: predictedPrice < 150000 ? 'red' : predictedPrice <= 300000 ? 'orange' : 'green'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: true, text: 'Predicted House Price' },
+                        annotation: {
+                            annotations: [
+                                {
+                                    type: 'line',
+                                    scaleID: 'y',
+                                    value: 150000,
+                                    borderColor: 'red',
+                                    borderWidth: 2,
+                                    label: {
+                                        content: 'Low ↔ Medium',
+                                        enabled: true,
+                                        position: 'start'
+                                    }
+                                },
+                                {
+                                    type: 'line',
+                                    scaleID: 'y',
+                                    value: 300000,
+                                    borderColor: 'orange',
+                                    borderWidth: 2,
+                                    label: {
+                                        content: 'Medium ↔ High',
+                                        enabled: true,
+                                        position: 'start'
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            suggestedMax: 500000
+                        }
+                    }
+                }
+            });
+        </script>
+
+        <p style="text-align:center;">
+            {% if predicted_price < 150000 %}
+                🔴 Affordable Property (Low Range)
+            {% elif predicted_price <= 300000 %}
+                🟡 Mid Range Property
+            {% else %}
+                🟢 Premium Property (High End)
+            {% endif %}
+        </p>
+    {% endif %}
+
+    <p style="text-align:center;"><a href="/insights">📊 View Data Insights</a></p>
+</div>
+</body>
+</html>

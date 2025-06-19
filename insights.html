@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Data Insights</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <h2>📊 Data Insights</h2>
+    <h4>1. Feature Correlation Heatmap</h4>
+    <img src="{{ url_for('static', filename='correlation_heatmap.png') }}" width="100%">
+    <h4>2. Price Distribution</h4>
+    <img src="{{ url_for('static', filename='price_distribution.png') }}" width="80%">
+    <h4>3. Feature Descriptions</h4>
+    <ul>
+        <li><b>CRIM</b>: Crime rate</li><li><b>ZN</b>: Residential land</li><li><b>INDUS</b>: Industrial area</li>
+        <li><b>CHAS</b>: Charles River</li><li><b>NOX</b>: Pollution</li><li><b>RM</b>: Rooms</li>
+        <li><b>AGE</b>: Older buildings</li><li><b>DIS</b>: Distance to jobs</li><li><b>RAD</b>: Highway access</li>
+        <li><b>TAX</b>: Tax rate</li><li><b>PTRATIO</b>: Student-teacher ratio</li><li><b>B</b>: Black population metric</li>
+        <li><b>LSTAT</b>: Lower income %</li>
+    </ul>
+    <p style="text-align:center;"><a href="/">← Back to Prediction</a></p>
+</div>
+</body>
+</html>
